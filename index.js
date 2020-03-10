@@ -5,7 +5,7 @@
 const Clubhouse = require('clubhouse-lib')
 const { ArgumentParser } = require('argparse')
 const { Octokit } = require("@octokit/rest")
-const gh_issue_re = /#(\d+)/gi
+const ghIssueRe = /#(\d+)/gi
 
 let parser = new ArgumentParser({
   version: '1.0.0',
@@ -56,7 +56,7 @@ const ch = Clubhouse.create(clubhouseToken);
 function cleanBody(body) {
 	// NOTE: if #xxxx is a pull request, "...issues/xxxx"
 	// will redirect to "...pulls/xxx"
-	return body.replace(gh_issue_re,
+	return body.replace(ghIssueRe,
 		'[#$1](https://github.com/windmilleng/tilt/issues/$1)')
 }
 
