@@ -5,6 +5,7 @@
 const Clubhouse = require('clubhouse-lib')
 const { ArgumentParser } = require('argparse')
 const { Octokit } = require("@octokit/rest")
+const ghIssueRe = /#(\d+)/gi
 
 let parser = new ArgumentParser({
   version: '1.0.0',
@@ -49,6 +50,16 @@ const TILT_PROJECT_ID = 6
 const octokit = new Octokit(octokitOptions)
 const ch = Clubhouse.create(clubhouseToken);
 
+// Given the body of the github issue, replace #xxxx references to a Github
+// issue/PR with a hyperlink to the issue/PR (otherwise Clubhouse renders
+// it as a link to a Clubhouse issue).
+function cleanBody(body) {
+	// NOTE: if #xxxx is a pull request, "...issues/xxxx"
+	// will redirect to "...pulls/xxx"
+	return body.replace(ghIssueRe,
+		'[#$1](https://github.com/windmilleng/tilt/issues/$1)')
+}
+
 // Given the github issue, see if there's already a clubhouse story for it.
 //
 // Returns a promise that evaluates to a story object, or null if none found.
@@ -72,7 +83,7 @@ function findClubhouseStoryForGithubIssue(issue) {
 // Create a new clubhouse story.
 function createClubhouseStoryForGithubIssue(issue) {
   let title = issue.title
-  let body = issue.body
+  let body = cleanBody(issue.body)
   let url = issue.html_url
   let id = issue.id
 
