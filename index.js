@@ -32,6 +32,9 @@ syncParser.addArgument(["-i", "--issue"], {
 
 let args = parser.parseArgs()
 let isDryRun = args.dry_run
+if (isDryRun) {
+  console.warn("⚠️ Running in dry run mode ⚠️")
+}
 let issueNumber = args.issue
 if (isNaN(issueNumber)) {
   console.error(`error: --issue must specify a number`)
@@ -129,7 +132,8 @@ octokit.issues
     } else {
       return createClubhouseStoryForGithubIssue(issue).then(response => {
         if (isDryRun) {
-          console.log("Would create new clubhouse issue:\n")
+          console.log("Running in dry run mode, so not writing to clubhouse")
+          console.log("Clubhouse story that would have been created:\n")
           console.log(response)
         } else {
           console.log("Created new clubhouse issue:\n" + response.app_url)
