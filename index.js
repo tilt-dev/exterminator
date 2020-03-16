@@ -13,6 +13,11 @@ let parser = new ArgumentParser({
   description: 'Tilt exterminator tool'
 });
 
+parser.addArgument('--dry-run', {
+  help: 'Print out what data will change rather than changing anything',
+  action: "storeTrue",
+})
+
 let subparsers = parser.addSubparsers()
 let syncParser = subparsers.addParser('sync', {
   addHelp: true,
@@ -26,6 +31,7 @@ syncParser.addArgument(['-i', '--issue'], {
 })
 
 let args = parser.parseArgs()
+let isDryRun = args.dry_run
 let issueNumber = args.issue
 if (isNaN(issueNumber)) {
   console.error(`error: --issue must specify a number`)
@@ -87,13 +93,19 @@ function createClubhouseStoryForGithubIssue(issue) {
   let url = issue.html_url
   let id = issue.id
 
-  return ch.createStory({
+  let story = {
     name: title,
     description: body,
     project_id: TILT_PROJECT_ID,
     labels: [{name: 'exterminator'}],
     external_tickets: [{external_id: String(id), external_url: url}]
-  })
+  }
+
+  if (isDryRun) {
+    return new Promise((resolve, _) => resolve(story))
+  }
+
+  return ch.createStory(story)
 }
 
 octokit.issues.get({
@@ -109,7 +121,12 @@ octokit.issues.get({
     console.log('Found existing clubhouse issue:\n' + existingStory.app_url)
   } else {
     return createClubhouseStoryForGithubIssue(issue).then((response) => {
-      console.log('Created new clubhouse issue:\n' + response.app_url)
+      if (isDryRun) {
+        console.log('Would create new clubhouse issue:\n')
+        console.log(response)
+      } else {
+        console.log('Created new clubhouse issue:\n' + response.app_url)
+      }
     })
   }
 }).catch((err) => {
