@@ -4,7 +4,8 @@
   "description": "Tools for the Tilt exterminator rotation",
   "bin": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier": "prettier --write index.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
     "@octokit/rest": "^17.0.0",
     "argparse": "^1.0.10",
     "clubhouse-lib": "^0.10.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.19.1"
   }
 }
