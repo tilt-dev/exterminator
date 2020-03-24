@@ -99,9 +99,16 @@ function createClubhouseStoryForGithubIssue(issue) {
   let body = cleanBody(issue.body)
   let url = issue.html_url
   let id = issue.id
+  let storyType = 'feature'
+  let labels = issue.labels || []
+  let isBug = labels.some((label) => label.name == 'bug')
+  if (isBug) {
+    storyType = 'bug'
+  }
 
   let story = {
     name: title,
+    story_type: storyType,
     description: body,
     project_id: TILT_PROJECT_ID,
     labels: [{ name: "exterminator" }],
