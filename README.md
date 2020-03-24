@@ -36,12 +36,11 @@ This creates 'exterminator' as an executable on your PATH
 exterminator sync --issue GITHUB_ISSUE_NUM
 ```
 
-where GITHUB_ISSUE_NUM as the issue number of an issue in https://github.com/windmilleng/tilt.
+where GITHUB_ISSUE_NUM is the issue number of an issue in https://github.com/windmilleng/tilt.
 
 ## License
 
 Copyright 2020 Windmill Engineering
 
 Licensed under [the Apache License, Version 2.0](LICENSE)
-
 
