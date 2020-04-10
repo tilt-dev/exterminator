@@ -82,7 +82,12 @@ function findClubhouseStoryForGithubIssue(issue) {
   // https://github.com/clubhouse/clubhouse-lib/issues/23
   // https://github.com/clubhouse/clubhouse-lib/issues/70
   let title = issue.title
-  return ch.searchStories(title).then(response => {
+
+  // Remove special characters from the title in case they
+  // are search operators.
+  let simplifiedTitle = title.replace(/[^a-zA-Z]/gi, ' ')
+  
+  return ch.searchStories(simplifiedTitle).then(response => {
     let stories = response.data
     return stories.find(story => {
       let links = story.external_tickets || []
