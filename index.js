@@ -85,9 +85,9 @@ function findClubhouseStoryForGithubIssue(issue) {
 
   // Remove special characters from the title in case they
   // are search operators.
-  let simplifiedTitle = title.replace(/[^a-zA-Z]/gi, ' ')
+  let simplifiedTitle = title.replace(/[^a-zA-Z0-9_]/gi, ' ')
   
-  return ch.searchStories(simplifiedTitle).then(response => {
+  return ch.searchStories(simplifiedTitle, 25).then(response => {
     let stories = response.data
     return stories.find(story => {
       let links = story.external_tickets || []
