@@ -77,23 +77,11 @@ function cleanBody(body) {
 //
 // Returns a promise that evaluates to a story object, or null if none found.
 function findClubhouseStoryForGithubIssue(issue) {
-  // The API for this is currently crappy, but clubhouse team says they're
-  // going to make it better soon.
-  // https://github.com/clubhouse/clubhouse-lib/issues/23
-  // https://github.com/clubhouse/clubhouse-lib/issues/70
-  let title = issue.title
-
-  // Remove special characters from the title in case they
-  // are search operators.
-  let simplifiedTitle = title.replace(/[^a-zA-Z0-9_]/gi, ' ')
-  
-  return ch.searchStories(simplifiedTitle, 25).then(response => {
-    let stories = response.data
-    return stories.find(story => {
-      let links = story.external_tickets || []
-      return links.some(link => {
-        return link.external_url == issue.html_url
-      })
+  let url = issue.html_url
+  return ch.getResource('external-link/stories', {'external_link': url}).then(response => {
+    return response.find(story => {
+      let links = story.external_links || []
+      return links.some(link => link == issue.html_url)
     })
   })
 }
@@ -117,7 +105,7 @@ function createClubhouseStoryForGithubIssue(issue) {
     description: body,
     project_id: TILT_PROJECT_ID,
     labels: [{ name: "exterminator" }],
-    external_tickets: [{ external_id: String(id), external_url: url }],
+    external_links: [ url ],
   }
 
   if (isDryRun) {
