@@ -33,10 +33,10 @@ This creates 'exterminator' as an executable on your PATH
 ## 4) Import!
 
 ```
-exterminator sync --issue GITHUB_ISSUE_NUM
+exterminator sync --issue GITHUB_ISSUE_URL
 ```
 
-where GITHUB_ISSUE_NUM is the issue number of an issue in https://github.com/windmilleng/tilt.
+where GITHUB_ISSUE_URL is the URL of any issue that you have access to, e.g. https://github.com/tilt-dev/tilt/issues/1.
 
 ## License
 
