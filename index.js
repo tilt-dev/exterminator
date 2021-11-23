@@ -75,7 +75,7 @@ function cleanBody(body) {
   // will redirect to "...pulls/xxx"
   return body.replace(
     ghIssueRe,
-    "[#$1](https://github.com/windmilleng/tilt/issues/$1)"
+    `[#$1](https://github.com/${owner}/${repo}/issues/$1)`
   )
 }
 
