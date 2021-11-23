@@ -121,10 +121,13 @@ function createClubhouseStoryForGithubIssue(issue) {
   return ch.createStory(story)
 }
 
+
+
+
 octokit.issues
   .get({
-    owner: "windmilleng",
-    repo: "tilt",
+    owner: owner,
+    repo: repo,
     issue_number: issueNumber,
   })
   .then(response => {
