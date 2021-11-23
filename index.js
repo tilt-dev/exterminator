@@ -25,9 +25,9 @@ let syncParser = subparsers.addParser("sync", {
 })
 
 syncParser.addArgument(["-i", "--issue"], {
-  help: "The github issue number to import into clubhouse",
+  help: "The github issue to import into clubhouse",
   required: true,
-  type: Number,
+  type: String,
 })
 
 let args = parser.parseArgs()
@@ -35,11 +35,17 @@ let isDryRun = args.dry_run
 if (isDryRun) {
   console.warn("⚠️ Running in dry run mode ⚠️")
 }
-let issueNumber = args.issue
-if (isNaN(issueNumber)) {
-  console.error(`error: --issue must specify a number`)
+const issueURL = args.issue
+const ghRegex = /github.com\/([^\/]+)\/([^\/]+)\/[^\/]+\/(\d+)/i;
+const matches = issueURL.match(ghRegex);
+let owner, repo, issueNumber;
+if (!matches) {
+  console.error(`error: --issue must be a valid URL to a github issue, e.g.: https://github.com/tilt-dev/tilt/issues/1`)
   process.exit(1)
 }
+owner = matches[1];
+repo = matches[2];
+issueNumber = matches[3];
 
 const clubhouseToken = process.env.CLUBHOUSE_API_TOKEN
 if (!clubhouseToken) {
