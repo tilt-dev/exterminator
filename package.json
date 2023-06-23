@@ -14,7 +14,7 @@
   "author": "nick@tilt.dev",
   "license": "Apache-2.0",
   "dependencies": {
-    "@octokit/rest": "^17.0.0",
+    "@octokit/rest": "^19.0.13",
     "argparse": "^1.0.10",
     "clubhouse-lib": "^0.12.0"
   },
